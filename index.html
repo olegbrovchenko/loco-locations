@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>LOCO · Location Shortlist</title>
-<meta name="description" content="RVFV x YAPI - LOCO. Location shortlist for review.">
-<meta property="og:title" content="LOCO · Location Shortlist">
-<meta property="og:description" content="RVFV x YAPI - LOCO. Ten houses, ranked. Tap to review.">
+<title>LOCO · Localizaciones</title>
+<meta name="description" content="RVFV x YAPI - LOCO. Selección de localizaciones para revisión.">
+<meta property="og:title" content="LOCO · Localizaciones">
+<meta property="og:description" content="RVFV x YAPI - LOCO. Nueve casas, en orden. Entra y revisa.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -59,6 +59,28 @@ h1 em{font-style:normal; color:var(--ink3)}
 .lede b{color:var(--ink); font-weight:500}
 .meta{margin-top:24px; font-size:13px; color:var(--ink3);
   display:flex; flex-wrap:wrap; gap:8px 18px}
+
+.warn{
+  margin:26px 0 0; padding:16px 18px; border-radius:12px;
+  background:rgba(217,154,0,.10); border:1px solid rgba(217,154,0,.34);
+  color:#e8d4a6; font-size:14.5px; max-width:70ch;
+}
+.warn b{display:block; color:var(--amber); font-weight:600; font-size:11px;
+  letter-spacing:.14em; text-transform:uppercase; margin-bottom:6px}
+
+/* arrows */
+.nav{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:5;
+  width:42px; height:42px; border-radius:50%; cursor:pointer;
+  background:rgba(10,10,10,.60); border:1px solid rgba(255,255,255,.20);
+  color:#fff; font-size:19px; line-height:1; display:none;
+  align-items:center; justify-content:center; backdrop-filter:blur(8px);
+  transition:background .15s, opacity .15s;
+}
+.nav:hover{background:rgba(10,10,10,.85)}
+.nav[disabled]{opacity:.25; cursor:default}
+.nav.prev{left:12px} .nav.next{right:12px}
+@media(hover:hover) and (pointer:fine){ .nav{display:flex} }
 
 /* ---------- section ---------- */
 .sec{padding:52px 0 8px}
@@ -147,21 +169,27 @@ footer{margin:70px 0 0; padding:26px 0 60px; border-top:1px solid var(--line);
 <body>
 
 <div class="bar"><div class="bar-in">
-  <div class="brand">LOCO<span>Location shortlist</span></div>
+  <div class="brand">LOCO<span>Localizaciones</span></div>
   <div class="bar-sp"></div>
-  <button class="btn btn-go" id="send" disabled>Send my picks</button>
+  <button class="btn btn-go" id="send" disabled>Enviar mi selección</button>
 </div></div>
 
 <div class="wrap">
 
   <section class="intro">
-    <h1>Ten houses.<br><em>Ranked, not sorted.</em></h1>
-    <p class="lede">Location shortlist for the <b>RVFV x YAPI - LOCO</b> music video. Everything here is an American-style house near Madrid, available to book for filming.</p>
-    <p class="lede">Order is the director's, top to bottom. Tap <b>Back this one</b> on anything you would go with, then hit <b>Send my picks</b> and paste the result back to Oleg.</p>
+    <h1>Nueve casas.<br><em>En orden de preferencia.</em></h1>
+    <p class="lede">Selección de localizaciones para el videoclip <b>RVFV x YAPI - LOCO</b>. Todas son casas de estilo americano cerca de Madrid, disponibles para rodaje.</p>
+    <p class="lede">El orden es el del director, de arriba abajo. Pulsa <b>Me quedo con esta</b> en las que apoyarías, y luego <b>Enviar mi selección</b> para pegársela a Oleg.</p>
+
+    <div class="warn">
+      <b>Importante</b>
+      Las fotos que hay aquí son solo una muestra, una o dos por casa. Antes de decidir nada, entra en la ficha original de cada casa y mira todas las fotos. El enlace está en cada tarjeta, abajo a la izquierda.
+    </div>
+
     <div class="meta">
-      <span>Swipe each photo strip sideways</span>
-      <span>Tap a photo to enlarge</span>
-      <span>Works on phone and laptop</span>
+      <span>Desliza las fotos o usa las flechas</span>
+      <span>Pulsa una foto para ampliarla</span>
+      <span>Funciona en móvil y en ordenador</span>
     </div>
   </section>
 
@@ -171,8 +199,8 @@ footer{margin:70px 0 0; padding:26px 0 60px; border-top:1px solid var(--line);
   <section class="sec" id="s-rest"></section>
 
   <footer>
-    Photos and specifications belong to the location agencies, Tao Plus and Rep Locations.
-    Shared for production review only.
+    Las fotos y los datos pertenecen a las agencias de localizaciones, Tao Plus y Rep Locations.
+    Compartido solo para revisión de producción.
   </footer>
 </div>
 
@@ -199,42 +227,68 @@ function card(h, lead){
   el.innerHTML =
    '<div class="shotwrap" style="position:relative">'+
      '<div class="shots">'+imgs.join('')+'</div>'+
-     (imgs.length>1?'<div class="swipe">1 / '+imgs.length+'</div><div class="dots">'+dots+'</div>':'')+
+     (imgs.length>1?'<button class="nav prev" aria-label="Anterior">&#8249;</button>'+
+                     '<button class="nav next" aria-label="Siguiente">&#8250;</button>'+
+                     '<div class="swipe">1 / '+imgs.length+'</div><div class="dots">'+dots+'</div>':'')+
    '</div>'+
    '<div class="body">'+
      '<div class="chip" style="color:'+t.color+'"><i style="background:'+t.color+'"></i>'+t.label+'</div>'+
      '<h3>'+esc(h.name)+'</h3>'+
      '<p class="where"><b>'+esc(h.area)+'</b> &nbsp;·&nbsp; '+esc(h.ref)+'</p>'+
      '<p class="verdict">'+esc(h.verdict)+'</p>'+
-     (h.blocker?'<div class="aside block"><b>Before this can work</b>'+esc(h.blocker)+'</div>':'')+
+     (h.blocker?'<div class="aside block"><b>Antes de que esto funcione</b>'+esc(h.blocker)+'</div>':'')+
      (h.note?'<div class="aside">'+esc(h.note)+'</div>':'')+
      '<div class="foot">'+links+'<div class="foot-sp"></div>'+
-       '<button class="pick"><span class="tick">+</span>Back this one</button>'+
+       '<button class="pick"><span class="tick">+</span>Me quedo con esta</button>'+
      '</div>'+
    '</div>';
 
-  // strip counter + dots. Two independent drivers so one failing is harmless.
+  // photo strip: counter, dots and desktop arrows, all sharing one state
   const strip = el.querySelector('.shots');
-  const cnt = el.querySelector('.swipe'), dotEls = el.querySelectorAll('.dots i');
-  if(cnt){
-    const figs = [...strip.querySelectorAll('figure')];
-    const show = i => {
-      if(i < 0 || i >= imgs.length) return;
-      cnt.textContent = (i+1)+' / '+imgs.length;
-      dotEls.forEach((d,j)=>d.classList.toggle('on', j===i));
-    };
-    const fromScroll = () => {
-      const step = figs[0] ? figs[0].getBoundingClientRect().width : strip.clientWidth;
-      if(step > 0) show(Math.round(strip.scrollLeft / step));
-    };
-    strip.addEventListener('scroll', fromScroll, {passive:true});
-    if('IntersectionObserver' in window){
-      const io = new IntersectionObserver(es=>{
-        es.forEach(e=>{ if(e.intersectionRatio >= 0.55) show(figs.indexOf(e.target)); });
-      }, {root:strip, threshold:[0.55]});
-      figs.forEach(f=>io.observe(f));
+  const figs  = [...strip.querySelectorAll('figure')];
+  const cnt   = el.querySelector('.swipe');
+  const dotEls= el.querySelectorAll('.dots i');
+  const prev  = el.querySelector('.nav.prev'), next = el.querySelector('.nav.next');
+
+  const stepW = () => figs[0] ? figs[0].getBoundingClientRect().width : strip.clientWidth;
+  const show = i => {
+    if(!cnt || i < 0 || i >= imgs.length) return;
+    cnt.textContent = (i+1)+' / '+imgs.length;
+    dotEls.forEach((d,j)=>d.classList.toggle('on', j===i));
+  };
+  const sync = () => {
+    const w = stepW();
+    if(w > 0) show(Math.round(strip.scrollLeft / w));
+    const max = strip.scrollWidth - strip.clientWidth;
+    if(max <= 0){                       // not laid out yet: never lock the arrows
+      if(prev) prev.disabled = false;
+      if(next) next.disabled = false;
+      return;
     }
+    if(prev) prev.disabled = strip.scrollLeft < 8;
+    if(next) next.disabled = strip.scrollLeft > max - 8;
+  };
+  strip.addEventListener('scroll', sync, {passive:true});
+  if('IntersectionObserver' in window && cnt){
+    const io = new IntersectionObserver(es=>{
+      es.forEach(e=>{ if(e.intersectionRatio >= 0.55) show(figs.indexOf(e.target)); });
+    }, {root:strip, threshold:[0.55]});
+    figs.forEach(f=>io.observe(f));
   }
+  if(prev && next){
+    const go = dir => {
+      const max = Math.max(0, strip.scrollWidth - strip.clientWidth);
+      strip.scrollLeft = Math.max(0, Math.min(max, strip.scrollLeft + dir*stepW()));
+      sync();
+    };
+    prev.addEventListener('click', ()=>go(-1));
+    next.addEventListener('click', ()=>go(1));
+  }
+  requestAnimationFrame(()=>requestAnimationFrame(sync));
+  setTimeout(sync, 300);
+  addEventListener('resize', sync, {passive:true});
+  addEventListener('load', sync);
+  sync();
 
   strip.querySelectorAll('img').forEach(im=>im.addEventListener('click',()=>{
     lbi.src = im.src; lb.classList.add('on');
@@ -245,11 +299,11 @@ function card(h, lead){
     const on = picked.has(h.id);
     on ? picked.delete(h.id) : picked.add(h.id);
     btn.classList.toggle('on', !on);
-    btn.innerHTML = on ? '<span class="tick">+</span>Back this one'
-                       : '<span class="tick">&check;</span>Backed';
+    btn.innerHTML = on ? '<span class="tick">+</span>Me quedo con esta'
+                       : '<span class="tick">&check;</span>Seleccionada';
     el.classList.toggle('picked', !on);
     send.disabled = picked.size === 0;
-    send.textContent = picked.size ? 'Send my picks ('+picked.size+')' : 'Send my picks';
+    send.textContent = picked.size ? 'Enviar mi selección ('+picked.size+')' : 'Enviar mi selección';
     try{ localStorage.setItem('loco-picks', JSON.stringify([...picked])); }catch(e){}
   });
   return el;
@@ -264,12 +318,10 @@ function section(host, title, list, lead){
   s.appendChild(box);
 }
 
-const ORDER2 = ["h08","h09","h03"];   // director's order inside the contenders
-section('s-lead','The one', HOUSES.filter(h=>h.tier===1), true);
-section('s-mid','Right behind it',
-        ORDER2.map(id=>HOUSES.find(h=>h.id===id)).filter(Boolean), true);
-section('s-cond','Conditional',    HOUSES.filter(h=>h.tier===3), true);
-section('s-rest','Also on the table', HOUSES.filter(h=>h.tier===4), false);
+section('s-lead','La primera opción', HOUSES.filter(h=>h.tier===1), true);
+section('s-mid','Justo detrás',       HOUSES.filter(h=>h.tier===2), true);
+section('s-cond','Con condiciones',   HOUSES.filter(h=>h.tier===3), true);
+section('s-rest','También sobre la mesa', HOUSES.filter(h=>h.tier===4), false);
 
 // restore
 try{
@@ -292,17 +344,17 @@ function flash(m){ toast.textContent=m; toast.classList.add('on');
 
 send.addEventListener('click', async ()=>{
   const chosen = HOUSES.filter(h=>picked.has(h.id));
-  const txt = 'LOCO location picks\n\n' +
+  const txt = 'LOCO - mi selección de localizaciones\n\n' +
     chosen.map(h=>'· '+h.name+' ('+h.ref+') - '+h.area).join('\n') +
     '\n\n' + location.href;
   try{
     await navigator.clipboard.writeText(txt);
-    flash('Copied. Paste it to Oleg on WhatsApp.');
+    flash('Copiado. Pégaselo a Oleg por WhatsApp.');
   }catch(e){
     const ta=document.createElement('textarea');
     ta.value=txt; document.body.appendChild(ta); ta.select();
-    try{ document.execCommand('copy'); flash('Copied. Paste it to Oleg on WhatsApp.'); }
-    catch(_){ prompt('Copy this and send it to Oleg:', txt); }
+    try{ document.execCommand('copy'); flash('Copiado. Pégaselo a Oleg por WhatsApp.'); }
+    catch(_){ prompt('Copia esto y envíaselo a Oleg:', txt); }
     ta.remove();
   }
 });
