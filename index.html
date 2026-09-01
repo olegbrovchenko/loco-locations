@@ -167,6 +167,7 @@ footer{margin:70px 0 0; padding:26px 0 60px; border-top:1px solid var(--line);
 
   <section class="sec" id="s-lead"></section>
   <section class="sec" id="s-mid"></section>
+  <section class="sec" id="s-cond"></section>
   <section class="sec" id="s-rest"></section>
 
   <footer>
@@ -263,8 +264,11 @@ function section(host, title, list, lead){
   s.appendChild(box);
 }
 
-section('s-lead','The one',        HOUSES.filter(h=>h.tier===1), true);
-section('s-mid','Live contenders', HOUSES.filter(h=>h.tier===2||h.tier===3), true);
+const ORDER2 = ["h08","h09","h03"];   // director's order inside the contenders
+section('s-lead','The one', HOUSES.filter(h=>h.tier===1), true);
+section('s-mid','Right behind it',
+        ORDER2.map(id=>HOUSES.find(h=>h.id===id)).filter(Boolean), true);
+section('s-cond','Conditional',    HOUSES.filter(h=>h.tier===3), true);
 section('s-rest','Also on the table', HOUSES.filter(h=>h.tier===4), false);
 
 // restore
