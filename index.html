@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>LOCO · Location Shortlist</title>
+<meta name="description" content="RVFV x YAPI - LOCO. Location shortlist for review.">
+<meta property="og:title" content="LOCO · Location Shortlist">
+<meta property="og:description" content="RVFV x YAPI - LOCO. Ten houses, ranked. Tap to review.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0f10; --panel:#161617; --panel2:#1c1c1e; --line:#2a2a2d;
+  --ink:#f2ede6; --ink2:#a5a29d; --ink3:#6f6d6a;
+  --amber:#d99a00; --red:#c6171c;
+  --maxw:1180px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%; display:block}
+a{color:inherit}
+
+/* ---------- header ---------- */
+.bar{
+  position:sticky; top:0; z-index:50; background:rgba(15,15,16,.86);
+  backdrop-filter:saturate(140%) blur(12px); border-bottom:1px solid var(--line);
+  padding-top:env(safe-area-inset-top);
+}
+.bar-in{max-width:var(--maxw); margin:0 auto; padding:12px 20px;
+  display:flex; align-items:center; gap:14px}
+.brand{font-weight:600; letter-spacing:-.03em; font-size:15px; white-space:nowrap}
+.brand span{color:var(--ink3); font-weight:400; margin-left:8px}
+.bar-sp{flex:1}
+.btn{
+  font:inherit; font-size:13px; font-weight:500; color:var(--ink);
+  background:var(--panel2); border:1px solid var(--line); border-radius:999px;
+  padding:8px 16px; cursor:pointer; white-space:nowrap; transition:.15s;
+}
+.btn:hover{background:#242427; border-color:#3a3a3e}
+.btn-go{background:var(--amber); border-color:var(--amber); color:#141414; font-weight:600}
+.btn-go:hover{background:#eaa607; border-color:#eaa607}
+.btn[disabled]{opacity:.4; cursor:default}
+
+/* ---------- intro ---------- */
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px}
+.intro{padding:56px 0 40px; border-bottom:1px solid var(--line)}
+h1{font-size:clamp(30px,7vw,52px); line-height:1.04; letter-spacing:-.045em;
+   font-weight:600; margin:0 0 18px}
+h1 em{font-style:normal; color:var(--ink3)}
+.lede{font-size:clamp(15px,2.4vw,18px); color:var(--ink2); max-width:60ch; margin:0 0 8px}
+.lede b{color:var(--ink); font-weight:500}
+.meta{margin-top:24px; font-size:13px; color:var(--ink3);
+  display:flex; flex-wrap:wrap; gap:8px 18px}
+
+/* ---------- section ---------- */
+.sec{padding:52px 0 8px}
+.sec-h{display:flex; align-items:baseline; gap:12px; margin:0 0 24px}
+.sec-h h2{font-size:13px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  margin:0; color:var(--ink2)}
+.sec-h .n{font-size:13px; color:var(--ink3)}
+
+/* ---------- card ---------- */
+.card{
+  background:var(--panel); border:1px solid var(--line); border-radius:16px;
+  overflow:hidden; margin-bottom:28px; position:relative;
+}
+.card.picked{border-color:var(--amber)}
+.shots{display:flex; gap:2px; overflow-x:auto; scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch; background:#000}
+.shots::-webkit-scrollbar{height:0}
+.shots figure{margin:0; flex:0 0 100%; scroll-snap-align:start; position:relative; cursor:zoom-in}
+.shots img{width:100%; aspect-ratio:3/2; object-fit:cover}
+.card.lead .shots img{aspect-ratio:16/9}
+.dots{position:absolute; left:0; right:0; bottom:14px; display:flex; justify-content:center;
+  gap:6px; pointer-events:none}
+.dots i{width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.42)}
+.dots i.on{background:#fff}
+.swipe{position:absolute; top:14px; right:14px; font-size:11px; letter-spacing:.06em;
+  background:rgba(0,0,0,.55); color:#fff; padding:5px 10px; border-radius:999px;
+  backdrop-filter:blur(6px)}
+
+.body{padding:22px 22px 24px}
+.card.lead .body{padding:30px 30px 32px}
+.chip{display:inline-flex; align-items:center; gap:7px; font-size:11px; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase; margin-bottom:12px}
+.chip i{width:7px; height:7px; border-radius:50%}
+h3{margin:0 0 4px; font-size:clamp(21px,3.6vw,28px); letter-spacing:-.035em; font-weight:600}
+.card.lead h3{font-size:clamp(26px,5vw,38px)}
+.where{font-size:13px; color:var(--ink3); margin:0 0 16px}
+.where b{color:var(--ink2); font-weight:400}
+.verdict{margin:0; color:var(--ink2); font-size:15.5px; max-width:62ch}
+.card.lead .verdict{font-size:17px; color:#c9c5bf}
+.aside{margin:16px 0 0; padding:12px 15px; border-radius:10px; background:var(--panel2);
+  font-size:14px; color:var(--ink2); border-left:2px solid var(--ink3)}
+.block{border-left-color:var(--red); background:rgba(198,23,28,.07); color:#e5b6b6}
+.block b{display:block; color:#ff8d8d; font-weight:600; font-size:11px;
+  letter-spacing:.12em; text-transform:uppercase; margin-bottom:5px}
+
+.foot{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:22px}
+.lnk{font-size:13px; font-weight:500; text-decoration:none; padding:8px 15px;
+  border:1px solid var(--line); border-radius:999px; color:var(--ink2); transition:.15s}
+.lnk:hover{color:var(--ink); border-color:#3a3a3e}
+.foot-sp{flex:1}
+.pick{
+  font:inherit; font-size:13px; font-weight:500; cursor:pointer; transition:.15s;
+  background:transparent; color:var(--ink2);
+  border:1px solid var(--line); border-radius:999px; padding:8px 16px;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.pick:hover{color:var(--ink); border-color:#3a3a3e}
+.pick.on{background:var(--amber); border-color:var(--amber); color:#141414; font-weight:600}
+.pick .tick{font-size:14px; line-height:1}
+
+/* ---------- rest grid ---------- */
+.grid{display:grid; gap:22px; grid-template-columns:1fr}
+@media(min-width:760px){ .grid{grid-template-columns:1fr 1fr} .grid .card{margin-bottom:0} }
+.grid h3{font-size:20px}
+.grid .verdict{font-size:14.5px}
+
+/* ---------- lightbox ---------- */
+.lb{position:fixed; inset:0; z-index:200; background:rgba(0,0,0,.94);
+  display:none; align-items:center; justify-content:center; padding:20px}
+.lb.on{display:flex}
+.lb img{max-width:100%; max-height:88vh; object-fit:contain; border-radius:6px}
+.lb-x{position:absolute; top:calc(16px + env(safe-area-inset-top)); right:18px;
+  font-size:26px; color:#fff; background:none; border:0; cursor:pointer; line-height:1}
+
+/* ---------- toast ---------- */
+.toast{position:fixed; left:50%; transform:translateX(-50%) translateY(20px);
+  bottom:calc(24px + env(safe-area-inset-bottom)); z-index:300;
+  background:var(--ink); color:#141414; font-size:14px; font-weight:500;
+  padding:12px 22px; border-radius:999px; opacity:0; transition:.25s; pointer-events:none}
+.toast.on{opacity:1; transform:translateX(-50%) translateY(0)}
+
+footer{margin:70px 0 0; padding:26px 0 60px; border-top:1px solid var(--line);
+  font-size:12.5px; color:var(--ink3)}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="bar-in">
+  <div class="brand">LOCO<span>Location shortlist</span></div>
+  <div class="bar-sp"></div>
+  <button class="btn btn-go" id="send" disabled>Send my picks</button>
+</div></div>
+
+<div class="wrap">
+
+  <section class="intro">
+    <h1>Ten houses.<br><em>Ranked, not sorted.</em></h1>
+    <p class="lede">Location shortlist for the <b>RVFV x YAPI - LOCO</b> music video. Everything here is an American-style house near Madrid, available to book for filming.</p>
+    <p class="lede">Order is the director's, top to bottom. Tap <b>Back this one</b> on anything you would go with, then hit <b>Send my picks</b> and paste the result back to Oleg.</p>
+    <div class="meta">
+      <span>Swipe each photo strip sideways</span>
+      <span>Tap a photo to enlarge</span>
+      <span>Works on phone and laptop</span>
+    </div>
+  </section>
+
+  <section class="sec" id="s-lead"></section>
+  <section class="sec" id="s-mid"></section>
+  <section class="sec" id="s-rest"></section>
+
+  <footer>
+    Photos and specifications belong to the location agencies, Tao Plus and Rep Locations.
+    Shared for production review only.
+  </footer>
+</div>
+
+<div class="lb" id="lb"><button class="lb-x" id="lbx">&times;</button><img id="lbi" alt=""></div>
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+const picked = new Set();
+
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+function card(h, lead){
+  const t = TIERS[h.tier];
+  const imgs = ['<figure><img loading="lazy" src="img/'+h.id+'-hero.jpg" alt="'+esc(h.name)+'"></figure>'];
+  for(let i=1;i<=h.shots;i++)
+    imgs.push('<figure><img loading="lazy" src="img/'+h.id+'-'+i+'.jpg" alt="'+esc(h.name)+'"></figure>');
+  const dots = imgs.map((_,i)=>'<i class="'+(i?'':'on')+'"></i>').join('');
+  const links = h.links.map(l=>'<a class="lnk" target="_blank" rel="noopener" href="'+l[1]+'">'+esc(l[0])+' &nearr;</a>').join('');
+
+  const el = document.createElement('article');
+  el.className = 'card' + (lead?' lead':'');
+  el.dataset.id = h.id;
+  el.innerHTML =
+   '<div class="shotwrap" style="position:relative">'+
+     '<div class="shots">'+imgs.join('')+'</div>'+
+     (imgs.length>1?'<div class="swipe">1 / '+imgs.length+'</div><div class="dots">'+dots+'</div>':'')+
+   '</div>'+
+   '<div class="body">'+
+     '<div class="chip" style="color:'+t.color+'"><i style="background:'+t.color+'"></i>'+t.label+'</div>'+
+     '<h3>'+esc(h.name)+'</h3>'+
+     '<p class="where"><b>'+esc(h.area)+'</b> &nbsp;·&nbsp; '+esc(h.ref)+'</p>'+
+     '<p class="verdict">'+esc(h.verdict)+'</p>'+
+     (h.blocker?'<div class="aside block"><b>Before this can work</b>'+esc(h.blocker)+'</div>':'')+
+     (h.note?'<div class="aside">'+esc(h.note)+'</div>':'')+
+     '<div class="foot">'+links+'<div class="foot-sp"></div>'+
+       '<button class="pick"><span class="tick">+</span>Back this one</button>'+
+     '</div>'+
+   '</div>';
+
+  // strip counter + dots. Two independent drivers so one failing is harmless.
+  const strip = el.querySelector('.shots');
+  const cnt = el.querySelector('.swipe'), dotEls = el.querySelectorAll('.dots i');
+  if(cnt){
+    const figs = [...strip.querySelectorAll('figure')];
+    const show = i => {
+      if(i < 0 || i >= imgs.length) return;
+      cnt.textContent = (i+1)+' / '+imgs.length;
+      dotEls.forEach((d,j)=>d.classList.toggle('on', j===i));
+    };
+    const fromScroll = () => {
+      const step = figs[0] ? figs[0].getBoundingClientRect().width : strip.clientWidth;
+      if(step > 0) show(Math.round(strip.scrollLeft / step));
+    };
+    strip.addEventListener('scroll', fromScroll, {passive:true});
+    if('IntersectionObserver' in window){
+      const io = new IntersectionObserver(es=>{
+        es.forEach(e=>{ if(e.intersectionRatio >= 0.55) show(figs.indexOf(e.target)); });
+      }, {root:strip, threshold:[0.55]});
+      figs.forEach(f=>io.observe(f));
+    }
+  }
+
+  strip.querySelectorAll('img').forEach(im=>im.addEventListener('click',()=>{
+    lbi.src = im.src; lb.classList.add('on');
+  }));
+
+  const btn = el.querySelector('.pick');
+  btn.addEventListener('click', ()=>{
+    const on = picked.has(h.id);
+    on ? picked.delete(h.id) : picked.add(h.id);
+    btn.classList.toggle('on', !on);
+    btn.innerHTML = on ? '<span class="tick">+</span>Back this one'
+                       : '<span class="tick">&check;</span>Backed';
+    el.classList.toggle('picked', !on);
+    send.disabled = picked.size === 0;
+    send.textContent = picked.size ? 'Send my picks ('+picked.size+')' : 'Send my picks';
+    try{ localStorage.setItem('loco-picks', JSON.stringify([...picked])); }catch(e){}
+  });
+  return el;
+}
+
+function section(host, title, list, lead){
+  const s = document.getElementById(host);
+  s.innerHTML = '<div class="sec-h"><h2>'+title+'</h2><span class="n">'+list.length+'</span></div>';
+  const box = document.createElement('div');
+  if(host==='s-rest') box.className = 'grid';
+  list.forEach(h=>box.appendChild(card(h, lead)));
+  s.appendChild(box);
+}
+
+section('s-lead','The one',        HOUSES.filter(h=>h.tier===1), true);
+section('s-mid','Live contenders', HOUSES.filter(h=>h.tier===2||h.tier===3), true);
+section('s-rest','Also on the table', HOUSES.filter(h=>h.tier===4), false);
+
+// restore
+try{
+  (JSON.parse(localStorage.getItem('loco-picks')||'[]')).forEach(id=>{
+    const c = document.querySelector('.card[data-id="'+id+'"]');
+    if(c) c.querySelector('.pick').click();
+  });
+}catch(e){}
+
+// lightbox
+const lb=document.getElementById('lb'), lbi=document.getElementById('lbi');
+document.getElementById('lbx').onclick = ()=>lb.classList.remove('on');
+lb.onclick = e=>{ if(e.target!==lbi) lb.classList.remove('on'); };
+addEventListener('keydown', e=>{ if(e.key==='Escape') lb.classList.remove('on'); });
+
+// send picks
+const toast=document.getElementById('toast'), send=document.getElementById('send');
+function flash(m){ toast.textContent=m; toast.classList.add('on');
+  setTimeout(()=>toast.classList.remove('on'),2600); }
+
+send.addEventListener('click', async ()=>{
+  const chosen = HOUSES.filter(h=>picked.has(h.id));
+  const txt = 'LOCO location picks\n\n' +
+    chosen.map(h=>'· '+h.name+' ('+h.ref+') - '+h.area).join('\n') +
+    '\n\n' + location.href;
+  try{
+    await navigator.clipboard.writeText(txt);
+    flash('Copied. Paste it to Oleg on WhatsApp.');
+  }catch(e){
+    const ta=document.createElement('textarea');
+    ta.value=txt; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); flash('Copied. Paste it to Oleg on WhatsApp.'); }
+    catch(_){ prompt('Copy this and send it to Oleg:', txt); }
+    ta.remove();
+  }
+});
+</script>
+</body>
+</html>
