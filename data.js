@@ -24,7 +24,7 @@ const HOUSES = [
  links:[["Ver todas las fotos en Rep Locations","https://replocations.com/localizaciones/c10244brl/"]],
  shots:5},
 {id:"h04",tier:4,name:"La Casita Amarilla",ref:"Rep C09537RL",area:"Villanueva de la Cañada, Madrid",
- verdict:"Preciosa de verdad, y la más pequeña de la lista. Siendo realistas da el frente de la casa y poco más.",
+ verdict:"Casa muy impresionante, pero extremadamente limitada de espacio en el exterior, al borde de ser inutilizable.",
  blocker:"Para aprovecharla bien haría falta una grúa que pase por encima del tejado.",
  links:[["Ver todas las fotos en Rep Locations","https://replocations.com/localizaciones/c09537rl/"]],
  shots:4},
