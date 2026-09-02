@@ -33,11 +33,11 @@ const HOUSES = [
  links:[["Ver todas las fotos en Tao Plus","https://www.taoplus.es/propiedades/vivienda-unifamiliar-0447/"]],
  shots:3},
 {id:"h07",tier:4,name:"La de los Ochenta",ref:"Rep C09919RL",area:"Boadilla del Monte, Madrid",
- verdict:"Chalet americano de los 80 con el mobiliario y la decoración originales intactos, más jardín, piscina y pista de tenis. De época, no actual.",
+ verdict:"Opción de reserva.",
  links:[["Ver todas las fotos en Rep Locations","https://replocations.com/localizaciones/c09919rl/"]],
  shots:3},
 {id:"h05",tier:4,name:"La Clásica",ref:"Tao Plus VU 0213",area:"Boadilla del Monte, Madrid",
- verdict:"La única casa de aquí que no es americana. Clásica con aire inglés, tres plantas, sala de billar y parcela ajardinada con piscina. Se queda como opción, no como match.",
+ verdict:"Opción de reserva.",
  links:[["Ver todas las fotos en Tao Plus","https://www.taoplus.es/propiedades/vivienda-unifamiliar-0213/"]],
  shots:3},
 ];
