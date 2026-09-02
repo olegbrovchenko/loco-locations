@@ -1,6 +1,6 @@
 const HOUSES = [
 {id:"h01",tier:1,name:"La Casa Azul",ref:"Tao Plus VU 0451 · Rep C09928RL",area:"El Álamo, Madrid",
- verdict:"Primera opción desde el primer día de scouting. Revestimiento azul americano, hiedra cubriendo todo el frente, porche de lado a lado y piscina con pérgola detrás. Es la única casa de la lista que ya parece el videoclip sin tocarle nada.",
+ verdict:"La casa americana perfecta. Varios espacios distintos dentro de la misma parcela que se pueden montar como sets diferentes, y en un lateral una nave tipo garaje preciosa que se puede vaciar y convertir en un set muy interesante.",
  note:"Está listada por dos agencias distintas. Es la misma casa. Reservar por la que dé mejor precio.",
  links:[["Ver todas las fotos en Tao Plus","https://www.taoplus.es/propiedades/vivienda-unifamiliar-0451/"],["Ficha en Rep Locations","https://replocations.com/localizaciones/c09928rl/"]],
  shots:6},
