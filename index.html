@@ -13,9 +13,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0f0f10; --panel:#161617; --panel2:#1c1c1e; --line:#2a2a2d;
-  --ink:#f2ede6; --ink2:#a5a29d; --ink3:#6f6d6a;
-  --amber:#d99a00; --red:#c6171c;
+  color-scheme:light;
+  --bg:#ffffff; --panel:#ffffff; --panel2:#f5f3f0; --line:#e4e1dc;
+  --ink:#121212; --ink2:#55524d; --ink3:#78746e;
+  --amber:#8a6600; --amber-hi:#d99a00; --red:#b3141a;
+  --shadow:0 1px 2px rgba(18,18,18,.05), 0 8px 24px rgba(18,18,18,.06);
   --maxw:1180px;
 }
 *{box-sizing:border-box}
@@ -30,7 +32,7 @@ a{color:inherit}
 
 /* ---------- header ---------- */
 .bar{
-  position:sticky; top:0; z-index:50; background:rgba(15,15,16,.86);
+  position:sticky; top:0; z-index:50; background:rgba(255,255,255,.88);
   backdrop-filter:saturate(140%) blur(12px); border-bottom:1px solid var(--line);
   padding-top:env(safe-area-inset-top);
 }
@@ -44,9 +46,9 @@ a{color:inherit}
   background:var(--panel2); border:1px solid var(--line); border-radius:999px;
   padding:8px 16px; cursor:pointer; white-space:nowrap; transition:.15s;
 }
-.btn:hover{background:#242427; border-color:#3a3a3e}
-.btn-go{background:var(--amber); border-color:var(--amber); color:#141414; font-weight:600}
-.btn-go:hover{background:#eaa607; border-color:#eaa607}
+.btn:hover{background:#efece8; border-color:#d2cec8}
+.btn-go{background:var(--ink); border-color:var(--ink); color:#fff; font-weight:600}
+.btn-go:hover{background:#000; border-color:#000}
 .btn[disabled]{opacity:.4; cursor:default}
 
 /* ---------- intro ---------- */
@@ -62,8 +64,8 @@ h1 em{font-style:normal; color:var(--ink3)}
 
 .warn{
   margin:26px 0 0; padding:16px 18px; border-radius:12px;
-  background:rgba(217,154,0,.10); border:1px solid rgba(217,154,0,.34);
-  color:#e8d4a6; font-size:14.5px; max-width:70ch;
+  background:#fff8e6; border:1px solid #e8cf92;
+  color:#5c4708; font-size:14.5px; max-width:70ch;
 }
 .warn b{display:block; color:var(--amber); font-weight:600; font-size:11px;
   letter-spacing:.14em; text-transform:uppercase; margin-bottom:6px}
@@ -92,11 +94,11 @@ h1 em{font-style:normal; color:var(--ink3)}
 /* ---------- card ---------- */
 .card{
   background:var(--panel); border:1px solid var(--line); border-radius:16px;
-  overflow:hidden; margin-bottom:28px; position:relative;
+  overflow:hidden; margin-bottom:28px; position:relative; box-shadow:var(--shadow);
 }
-.card.picked{border-color:var(--amber)}
+.card.picked{border-color:var(--amber-hi); box-shadow:0 0 0 2px rgba(217,154,0,.28), var(--shadow)}
 .shots{display:flex; gap:2px; overflow-x:auto; scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch; background:#000}
+  -webkit-overflow-scrolling:touch; background:#efece8}
 .shots::-webkit-scrollbar{height:0}
 .shots figure{margin:0; flex:0 0 100%; scroll-snap-align:start; position:relative; cursor:zoom-in}
 .shots img{width:100%; aspect-ratio:3/2; object-fit:cover}
@@ -119,17 +121,17 @@ h3{margin:0 0 4px; font-size:clamp(21px,3.6vw,28px); letter-spacing:-.035em; fon
 .where{font-size:13px; color:var(--ink3); margin:0 0 16px}
 .where b{color:var(--ink2); font-weight:400}
 .verdict{margin:0; color:var(--ink2); font-size:15.5px; max-width:62ch}
-.card.lead .verdict{font-size:17px; color:#c9c5bf}
+.card.lead .verdict{font-size:17px; color:#3a3835}
 .aside{margin:16px 0 0; padding:12px 15px; border-radius:10px; background:var(--panel2);
-  font-size:14px; color:var(--ink2); border-left:2px solid var(--ink3)}
-.block{border-left-color:var(--red); background:rgba(198,23,28,.07); color:#e5b6b6}
-.block b{display:block; color:#ff8d8d; font-weight:600; font-size:11px;
+  font-size:14px; color:var(--ink2); border-left:2px solid #c9c4bc}
+.block{border-left-color:var(--red); background:#fdf2f2; color:#7d2a2d}
+.block b{display:block; color:var(--red); font-weight:600; font-size:11px;
   letter-spacing:.12em; text-transform:uppercase; margin-bottom:5px}
 
 .foot{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:22px}
 .lnk{font-size:13px; font-weight:500; text-decoration:none; padding:8px 15px;
   border:1px solid var(--line); border-radius:999px; color:var(--ink2); transition:.15s}
-.lnk:hover{color:var(--ink); border-color:#3a3a3e}
+.lnk:hover{color:var(--ink); border-color:#c9c4bc; background:#faf9f7}
 .foot-sp{flex:1}
 .pick{
   font:inherit; font-size:13px; font-weight:500; cursor:pointer; transition:.15s;
@@ -137,8 +139,8 @@ h3{margin:0 0 4px; font-size:clamp(21px,3.6vw,28px); letter-spacing:-.035em; fon
   border:1px solid var(--line); border-radius:999px; padding:8px 16px;
   display:inline-flex; align-items:center; gap:8px;
 }
-.pick:hover{color:var(--ink); border-color:#3a3a3e}
-.pick.on{background:var(--amber); border-color:var(--amber); color:#141414; font-weight:600}
+.pick:hover{color:var(--ink); border-color:#c9c4bc; background:#faf9f7}
+.pick.on{background:var(--amber); border-color:var(--amber); color:#fff; font-weight:600}
 .pick .tick{font-size:14px; line-height:1}
 
 /* ---------- rest grid ---------- */
@@ -148,7 +150,7 @@ h3{margin:0 0 4px; font-size:clamp(21px,3.6vw,28px); letter-spacing:-.035em; fon
 .grid .verdict{font-size:14.5px}
 
 /* ---------- lightbox ---------- */
-.lb{position:fixed; inset:0; z-index:200; background:rgba(0,0,0,.94);
+.lb{position:fixed; inset:0; z-index:200; background:rgba(28,26,24,.92);
   display:none; align-items:center; justify-content:center; padding:20px}
 .lb.on{display:flex}
 .lb img{max-width:100%; max-height:88vh; object-fit:contain; border-radius:6px}
@@ -158,7 +160,7 @@ h3{margin:0 0 4px; font-size:clamp(21px,3.6vw,28px); letter-spacing:-.035em; fon
 /* ---------- toast ---------- */
 .toast{position:fixed; left:50%; transform:translateX(-50%) translateY(20px);
   bottom:calc(24px + env(safe-area-inset-bottom)); z-index:300;
-  background:var(--ink); color:#141414; font-size:14px; font-weight:500;
+  background:var(--ink); color:#fff; font-size:14px; font-weight:500;
   padding:12px 22px; border-radius:999px; opacity:0; transition:.25s; pointer-events:none}
 .toast.on{opacity:1; transform:translateX(-50%) translateY(0)}
 

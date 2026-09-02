@@ -40,8 +40,8 @@ const HOUSES = [
  shots:3},
 ];
 const TIERS = {
- 1:{label:"Primera opción", color:"#d99a00"},
- 2:{label:"En la pelea",    color:"#4f9c8b"},
- 3:{label:"Con condiciones",color:"#c6621c"},
- 4:{label:"Opción",         color:"#7a828c"},
+ 1:{label:"Primera opción", color:"#8a6600"},
+ 2:{label:"En la pelea",    color:"#2f7d6b"},
+ 3:{label:"Con condiciones",color:"#a8500f"},
+ 4:{label:"Opción",         color:"#5c636d"},
 };
