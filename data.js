@@ -29,7 +29,7 @@ const HOUSES = [
  links:[["Ver todas las fotos en Rep Locations","https://replocations.com/localizaciones/c09537rl/"]],
  shots:4},
 {id:"h06",tier:4,name:"La Moderna",ref:"Tao Plus VU 0447",area:"Madrid, zona residencial",
- verdict:"Moderna y limpia, piscina larga, cenador de madera con cocina exterior. La opción segura si las casas americanas se caen.",
+ verdict:"Opción de reserva.",
  links:[["Ver todas las fotos en Tao Plus","https://www.taoplus.es/propiedades/vivienda-unifamiliar-0447/"]],
  shots:3},
 {id:"h07",tier:4,name:"La de los Ochenta",ref:"Rep C09919RL",area:"Boadilla del Monte, Madrid",
