@@ -15,7 +15,7 @@ const HOUSES = [
 {id:"h03",tier:2,name:"La Casa de Madera",ref:"Tao Plus VU 0236",area:"Urb. Santo Domingo, Madrid",
  verdict:"Candidata fuerte. Frente precioso bajo los pinos, y un garaje de madera independiente al otro lado de la parcela que da un segundo escenario real dentro de la misma reserva. Piscina, pérgola y un porche que recorre toda la casa de lado a lado.",
  links:[["Ver todas las fotos en Tao Plus","https://www.taoplus.es/propiedades/vivienda-unifamiliar-0236/"]],
- shots:5},
+ shots:3},
 {id:"h02",tier:3,name:"La Prefabricada",ref:"Rep C10244BRL",area:"Guadarrama, Madrid",
  verdict:"El exterior es la imagen más potente que hemos encontrado en toda la búsqueda. Frente americano de madera, porche y pradera abierta detrás. El problema está dentro: una sola sala abierta y nada más, así que la casa no aguanta un videoclip entero ella sola.",
  blocker:"Dos condiciones antes de que sea viable. El precio del día tiene que ser bajo, y hay que cerrar antes un segundo elemento, una caravana o una camioneta americana. Sin ese segundo elemento no hay material suficiente para rodar.",
