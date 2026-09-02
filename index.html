@@ -17,6 +17,7 @@
   --bg:#ffffff; --panel:#ffffff; --panel2:#f5f3f0; --line:#e4e1dc;
   --ink:#121212; --ink2:#55524d; --ink3:#78746e;
   --amber:#8a6600; --amber-hi:#d99a00; --red:#b3141a;
+  --green:#2cbd2c; --green-dark:#0a410a; --cream:#fbf6ef;   /* Brand DNI */
   --shadow:0 1px 2px rgba(18,18,18,.05), 0 8px 24px rgba(18,18,18,.06);
   --maxw:1180px;
 }
@@ -99,7 +100,7 @@ h1 em{font-style:normal; color:var(--ink3)}
   background:var(--panel); border:1px solid var(--line); border-radius:16px;
   overflow:hidden; margin-bottom:28px; position:relative; box-shadow:var(--shadow);
 }
-.card.picked{border-color:var(--amber-hi); box-shadow:0 0 0 2px rgba(217,154,0,.28), var(--shadow)}
+.card.picked{border-color:var(--green); box-shadow:0 0 0 2px rgba(44,189,44,.30), var(--shadow)}
 .shots{display:flex; gap:2px; overflow-x:auto; scroll-snap-type:x mandatory;
   -webkit-overflow-scrolling:touch; background:#efece8}
 .shots::-webkit-scrollbar{height:0}
@@ -145,14 +146,29 @@ h3{margin:0 0 4px; font-size:clamp(21px,3.6vw,28px); letter-spacing:-.035em; fon
 .lnk:hover{color:var(--ink); border-color:#c9c4bc; background:#faf9f7}
 .foot-sp{flex:1}
 .pick{
-  font:inherit; font-size:13px; font-weight:500; cursor:pointer; transition:.15s;
-  background:transparent; color:var(--ink2);
-  border:1px solid var(--line); border-radius:999px; padding:8px 16px;
-  display:inline-flex; align-items:center; gap:8px;
+  font:inherit; font-size:14px; font-weight:600; cursor:pointer;
+  transition:background .15s, border-color .15s, transform .12s, box-shadow .15s;
+  background:var(--green); color:#121212;            /* 7.51:1 */
+  border:1px solid var(--green); border-radius:999px; padding:11px 20px;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  box-shadow:0 1px 2px rgba(18,18,18,.10);
 }
-.pick:hover{color:var(--ink); border-color:#c9c4bc; background:#faf9f7}
-.pick.on{background:var(--amber); border-color:var(--amber); color:#fff; font-weight:600}
-.pick .tick{font-size:14px; line-height:1}
+.pick:hover{background:#26a826; border-color:#26a826}
+.pick:active{transform:scale(.97)}
+.pick.on{background:var(--green-dark); border-color:var(--green-dark);
+  color:var(--cream); box-shadow:none}          /* 11.01:1, reads as locked in */
+.pick.on:hover{background:#0d5210; border-color:#0d5210}
+.pick .tick{font-size:15px; line-height:1}
+
+/* on a phone it gets its own full-width row so it cannot be missed */
+@media(max-width:560px){
+  .foot{gap:12px}
+  .foot-sp{display:none}
+  .pick{flex:1 0 100%; padding:14px 20px; font-size:15px; order:0}
+  .lnk{order:1; flex:0 1 auto}
+  .foot{margin-top:20px}
+}
+@media(prefers-reduced-motion:reduce){ .pick{transition:none} .pick:active{transform:none} }
 .pick:focus-visible, .btn:focus-visible, .lnk:focus-visible{
   outline:2px solid var(--amber-hi); outline-offset:2px}
 body.lb-open{overflow:hidden}
