@@ -3,7 +3,7 @@ const HOUSES = [
  verdict:"Primera opción desde el primer día de scouting. Revestimiento azul americano, hiedra cubriendo todo el frente, porche de lado a lado y piscina con pérgola detrás. Es la única casa de la lista que ya parece el videoclip sin tocarle nada.",
  note:"Está listada por dos agencias distintas. Es la misma casa. Reservar por la que dé mejor precio.",
  links:[["Ver todas las fotos en Tao Plus","https://www.taoplus.es/propiedades/vivienda-unifamiliar-0451/"],["Ficha en Rep Locations","https://replocations.com/localizaciones/c09928rl/"]],
- shots:5},
+ shots:6},
 {id:"h08",tier:2,name:"La Finca",ref:"Rep C11569RL",area:"San Agustín del Guadalix, Madrid",
  verdict:"Candidata seria, y una de las casas más fuertes de toda la lista. Fachada de piedra con pórtico de columnas, piscina de tamaño resort, jardines amplios y una cabaña de madera aparte, que es un segundo escenario dentro de la misma reserva. La llegada más cinematográfica de todas.",
  links:[["Ver todas las fotos en Rep Locations","https://replocations.com/localizaciones/c11569rl/"]],
