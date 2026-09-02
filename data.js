@@ -19,7 +19,7 @@ const HOUSES = [
  links:[["Ver todas las fotos en Tao Plus","https://www.taoplus.es/propiedades/vivienda-unifamiliar-0236/"]],
  shots:3},
 {id:"h02",tier:3,name:"La Prefabricada",ref:"Rep C10244BRL",area:"Guadarrama, Madrid",
- verdict:"El exterior es la imagen más potente que hemos encontrado en toda la búsqueda. Frente americano de madera, porche y pradera abierta detrás. El problema está dentro: una sola sala abierta y nada más, así que la casa no aguanta un videoclip entero ella sola.",
+ verdict:"Frente de casa increíble, con sitio para aparcar un coche delante. Dentro es bastante limitada de sets. Sigue siendo una casa muy bonita, pero pobre en localizaciones interiores.",
  blocker:"Dos condiciones antes de que sea viable. El precio del día tiene que ser bajo, y hay que cerrar antes un segundo elemento, una caravana o una camioneta americana. Sin ese segundo elemento no hay material suficiente para rodar.",
  links:[["Ver todas las fotos en Rep Locations","https://replocations.com/localizaciones/c10244brl/"]],
  shots:5},
