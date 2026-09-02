@@ -20,7 +20,7 @@ const HOUSES = [
  verdict:"El exterior es la imagen más potente que hemos encontrado en toda la búsqueda. Frente americano de madera, porche y pradera abierta detrás. El problema está dentro: una sola sala abierta y nada más, así que la casa no aguanta un videoclip entero ella sola.",
  blocker:"Dos condiciones antes de que sea viable. El precio del día tiene que ser bajo, y hay que cerrar antes un segundo elemento, una caravana o una camioneta americana. Sin ese segundo elemento no hay material suficiente para rodar.",
  links:[["Ver todas las fotos en Rep Locations","https://replocations.com/localizaciones/c10244brl/"]],
- shots:4},
+ shots:5},
 {id:"h04",tier:4,name:"La Casita Amarilla",ref:"Rep C09537RL",area:"Villanueva de la Cañada, Madrid",
  verdict:"Preciosa de verdad, y la más pequeña de la lista. Siendo realistas da el frente de la casa y poco más.",
  blocker:"Para aprovecharla bien haría falta una grúa que pase por encima del tejado.",
