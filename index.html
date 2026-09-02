@@ -68,19 +68,24 @@ h1 em{font-style:normal; color:var(--ink3)}
 .warn b{display:block; color:var(--amber); font-weight:600; font-size:11px;
   letter-spacing:.14em; text-transform:uppercase; margin-bottom:6px}
 
-/* arrows */
+/* arrows — must read over a bright sky as well as a dark porch */
 .nav{
   position:absolute; top:50%; transform:translateY(-50%); z-index:5;
-  width:42px; height:42px; border-radius:50%; cursor:pointer;
-  background:rgba(10,10,10,.60); border:1px solid rgba(255,255,255,.20);
-  color:#fff; font-size:19px; line-height:1; display:none;
-  align-items:center; justify-content:center; backdrop-filter:blur(8px);
-  transition:background .15s, opacity .15s;
+  width:48px; height:48px; border-radius:50%; cursor:pointer; padding:0;
+  background:#fff; border:1px solid rgba(18,18,18,.10);
+  color:#121212; font-size:24px; font-weight:600; line-height:1; display:none;
+  align-items:center; justify-content:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.22), 0 8px 22px rgba(0,0,0,.20);
+  transition:background .15s, box-shadow .15s, transform .15s, opacity .15s;
 }
-.nav:hover{background:rgba(10,10,10,.85)}
-.nav[disabled]{opacity:.25; cursor:default}
-.nav.prev{left:12px} .nav.next{right:12px}
-@media(hover:hover) and (pointer:fine){ .nav{display:flex} }
+.nav:hover{background:#fff; transform:translateY(-50%) scale(1.08);
+  box-shadow:0 3px 10px rgba(0,0,0,.30), 0 12px 30px rgba(0,0,0,.24)}
+.nav:active{transform:translateY(-50%) scale(.96)}
+.nav:focus-visible{outline:3px solid var(--amber-hi); outline-offset:3px}
+.nav[disabled]{opacity:0; pointer-events:none}
+.nav.prev{left:14px} .nav.next{right:14px}
+@media(min-width:760px){ .nav{display:flex} }
+@media(prefers-reduced-motion:reduce){ .nav{transition:none} .nav:hover{transform:translateY(-50%)} }
 
 /* ---------- section ---------- */
 .sec{padding:52px 0 8px}
@@ -103,11 +108,12 @@ h1 em{font-style:normal; color:var(--ink3)}
 .card.lead .shots img{aspect-ratio:16/9}
 .dots{position:absolute; left:0; right:0; bottom:14px; display:flex; justify-content:center;
   gap:6px; pointer-events:none}
-.dots i{width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.42)}
-.dots i.on{background:#fff}
-.swipe{position:absolute; top:14px; right:14px; font-size:11px; letter-spacing:.06em;
-  background:rgba(0,0,0,.55); color:#fff; padding:5px 10px; border-radius:999px;
-  backdrop-filter:blur(6px)}
+.dots i{width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.55);
+  box-shadow:0 1px 3px rgba(0,0,0,.45)}
+.dots i.on{background:#fff; transform:scale(1.15)}
+.swipe{position:absolute; top:14px; right:14px; font-size:11px; font-weight:600;
+  letter-spacing:.06em; background:rgba(18,18,18,.72); color:#fff;
+  padding:5px 11px; border-radius:999px; backdrop-filter:blur(6px)}
 
 .body{padding:22px 22px 24px}
 .card.lead .body{padding:30px 30px 32px}
@@ -147,6 +153,9 @@ h3{margin:0 0 4px; font-size:clamp(21px,3.6vw,28px); letter-spacing:-.035em; fon
 .pick:hover{color:var(--ink); border-color:#c9c4bc; background:#faf9f7}
 .pick.on{background:var(--amber); border-color:var(--amber); color:#fff; font-weight:600}
 .pick .tick{font-size:14px; line-height:1}
+.pick:focus-visible, .btn:focus-visible, .lnk:focus-visible{
+  outline:2px solid var(--amber-hi); outline-offset:2px}
+body.lb-open{overflow:hidden}
 
 /* ---------- rest grid ---------- */
 .grid{display:grid; gap:22px; grid-template-columns:1fr}
@@ -178,7 +187,7 @@ footer{margin:70px 0 0; padding:26px 0 60px; border-top:1px solid var(--line);
 <div class="bar"><div class="bar-in">
   <div class="brand">LOCO<span>Localizaciones</span></div>
   <div class="bar-sp"></div>
-  <button class="btn btn-go" id="send" disabled>Enviar mi selección</button>
+  <button type="button" class="btn btn-go" id="send" disabled>Enviar mi selección</button>
 </div></div>
 
 <div class="wrap">
@@ -206,161 +215,257 @@ footer{margin:70px 0 0; padding:26px 0 60px; border-top:1px solid var(--line);
   </footer>
 </div>
 
-<div class="lb" id="lb"><button class="lb-x" id="lbx">&times;</button><img id="lbi" alt=""></div>
+<div class="lb" id="lb"><button type="button" class="lb-x" id="lbx" aria-label="Cerrar">&times;</button><img id="lbi" alt="" decoding="async"></div>
 <div class="toast" id="toast"></div>
 
 <script src="data.js"></script>
 <script>
+'use strict';
+
+// ---- page-level handles, declared BEFORE any card is built ----
+// (they used to sit below section(), so restoring saved picks threw a TDZ
+//  ReferenceError inside the click handler and the Send button stayed dead)
+const lb    = document.getElementById('lb');
+const lbi   = document.getElementById('lbi');
+const lbx   = document.getElementById('lbx');
+const send  = document.getElementById('send');
+const toast = document.getElementById('toast');
+
+const STORE  = 'loco-picks';       // never rename: renaming loses every viewer's selection
 const picked = new Set();
+const syncs  = [];                 // one resize listener drives every strip
 
-function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
+function save(){ try{ localStorage.setItem(STORE, JSON.stringify([...picked])); }catch(e){} }
+
+function refreshSend(){
+  const n = picked.size;
+  send.disabled = n === 0;
+  send.textContent = n ? 'Enviar mi selección (' + n + ')' : 'Enviar mi selección';
+}
+
+// single source of truth for a card's picked state, used by clicks AND by restore
+function setPick(el, on){
+  const btn = el.querySelector('.pick');
+  const id  = el.dataset.id;
+  on ? picked.add(id) : picked.delete(id);
+  el.classList.toggle('picked', on);
+  btn.classList.toggle('on', on);
+  btn.setAttribute('aria-pressed', String(on));
+  btn.innerHTML = on ? '<span class="tick">&check;</span>Seleccionada'
+                     : '<span class="tick">+</span>Me quedo con esta';
+  refreshSend();
+}
+
+let firstHero = true;   // only the very first image on the page is worth prioritising
 function card(h, lead){
   const t = TIERS[h.tier];
-  const imgs = ['<figure><img loading="lazy" src="img/'+h.id+'-hero.jpg" alt="'+esc(h.name)+'"></figure>'];
-  for(let i=1;i<=h.shots;i++)
-    imgs.push('<figure><img loading="lazy" src="img/'+h.id+'-'+i+'.jpg" alt="'+esc(h.name)+'"></figure>');
-  const dots = imgs.map((_,i)=>'<i class="'+(i?'':'on')+'"></i>').join('');
-  const links = h.links.map(l=>'<a class="lnk" target="_blank" rel="noopener" href="'+l[1]+'">'+esc(l[0])+' &nearr;</a>').join('');
+  const shots = [h.id + '-hero'];
+  for(let i = 1; i <= h.shots; i++) shots.push(h.id + '-' + i);
+
+  const imgs = shots.map((name, i) =>
+    '<figure><img src="img/' + name + '.jpg" alt="' + esc(h.name) + '"' +
+      ' decoding="async"' +
+      (i === 0 && firstHero ? ' fetchpriority="high"' : ' loading="lazy"') +
+    '></figure>').join('');
+  const dots  = shots.map((_, i) => '<i class="' + (i ? '' : 'on') + '"></i>').join('');
+  const links = h.links.map(l =>
+    '<a class="lnk" target="_blank" rel="noopener" href="' + esc(l[1]) + '">' +
+    esc(l[0]) + ' &nearr;</a>').join('');
+  const many = shots.length > 1;
+
+  firstHero = false;
 
   const el = document.createElement('article');
-  el.className = 'card' + (lead?' lead':'');
+  el.className = 'card' + (lead ? ' lead' : '');
   el.dataset.id = h.id;
   el.innerHTML =
-   '<div class="shotwrap" style="position:relative">'+
-     '<div class="shots">'+imgs.join('')+'</div>'+
-     (imgs.length>1?'<button class="nav prev" aria-label="Anterior">&#8249;</button>'+
-                     '<button class="nav next" aria-label="Siguiente">&#8250;</button>'+
-                     '<div class="swipe">1 / '+imgs.length+'</div><div class="dots">'+dots+'</div>':'')+
-   '</div>'+
-   '<div class="body">'+
-     '<div class="chip" style="color:'+t.color+'"><i style="background:'+t.color+'"></i>'+t.label+'</div>'+
-     '<h3>'+esc(h.name)+'</h3>'+
-     '<p class="where"><b>'+esc(h.area)+'</b> &nbsp;·&nbsp; '+esc(h.ref)+'</p>'+
-     '<p class="verdict">'+esc(h.verdict)+'</p>'+
-     (h.bullets?'<ul class="blist">'+h.bullets.map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul>':'')+
-     (h.closing?'<p class="closing">'+esc(h.closing)+'</p>':'')+
-     (h.blocker?'<div class="aside block"><b>Antes de que esto funcione</b>'+esc(h.blocker)+'</div>':'')+
-     (h.note?'<div class="aside">'+esc(h.note)+'</div>':'')+
-     '<div class="foot">'+links+'<div class="foot-sp"></div>'+
-       '<button class="pick"><span class="tick">+</span>Me quedo con esta</button>'+
-     '</div>'+
+   '<div class="shotwrap" style="position:relative">' +
+     '<div class="shots">' + imgs + '</div>' +
+     (many ? '<button type="button" class="nav prev" aria-label="Foto anterior">&#8249;</button>' +
+             '<button type="button" class="nav next" aria-label="Foto siguiente">&#8250;</button>' +
+             '<div class="swipe">1 / ' + shots.length + '</div>' +
+             '<div class="dots">' + dots + '</div>' : '') +
+   '</div>' +
+   '<div class="body">' +
+     '<div class="chip" style="color:' + t.color + '"><i style="background:' + t.color + '"></i>' + t.label + '</div>' +
+     '<h3>' + esc(h.name) + '</h3>' +
+     '<p class="where"><b>' + esc(h.area) + '</b> &nbsp;·&nbsp; ' + esc(h.ref) + '</p>' +
+     '<p class="verdict">' + esc(h.verdict) + '</p>' +
+     (h.bullets ? '<ul class="blist">' + h.bullets.map(b => '<li>' + esc(b) + '</li>').join('') + '</ul>' : '') +
+     (h.closing ? '<p class="closing">' + esc(h.closing) + '</p>' : '') +
+     (h.blocker ? '<div class="aside block"><b>Antes de que esto funcione</b>' + esc(h.blocker) + '</div>' : '') +
+     (h.note    ? '<div class="aside">' + esc(h.note) + '</div>' : '') +
+     '<div class="foot">' + links + '<div class="foot-sp"></div>' +
+       '<button type="button" class="pick" aria-pressed="false">' +
+         '<span class="tick">+</span>Me quedo con esta</button>' +
+     '</div>' +
    '</div>';
 
-  // photo strip: counter, dots and desktop arrows, all sharing one state
+  // ---- photo strip: counter, dots and arrows off one shared state ----
   const strip = el.querySelector('.shots');
   const figs  = [...strip.querySelectorAll('figure')];
   const cnt   = el.querySelector('.swipe');
   const dotEls= el.querySelectorAll('.dots i');
-  const prev  = el.querySelector('.nav.prev'), next = el.querySelector('.nav.next');
+  const prev  = el.querySelector('.nav.prev');
+  const next  = el.querySelector('.nav.next');
 
-  const stepW = () => figs[0] ? figs[0].getBoundingClientRect().width : strip.clientWidth;
+  const stepW = () => (figs[0] ? figs[0].getBoundingClientRect().width : strip.clientWidth);
+
   const show = i => {
-    if(!cnt || i < 0 || i >= imgs.length) return;
-    cnt.textContent = (i+1)+' / '+imgs.length;
-    dotEls.forEach((d,j)=>d.classList.toggle('on', j===i));
+    if(!cnt || i < 0 || i >= shots.length) return;
+    cnt.textContent = (i + 1) + ' / ' + shots.length;
+    dotEls.forEach((d, j) => d.classList.toggle('on', j === i));
   };
+
   const sync = () => {
     const w = stepW();
     if(w > 0) show(Math.round(strip.scrollLeft / w));
+    if(!prev) return;
     const max = strip.scrollWidth - strip.clientWidth;
-    if(max <= 0){                       // not laid out yet: never lock the arrows
-      if(prev) prev.disabled = false;
-      if(next) next.disabled = false;
-      return;
-    }
-    if(prev) prev.disabled = strip.scrollLeft < 8;
-    if(next) next.disabled = strip.scrollLeft > max - 8;
+    if(max <= 0){ prev.disabled = false; next.disabled = false; return; }  // pre-layout: never lock
+    prev.disabled = strip.scrollLeft < 8;
+    next.disabled = strip.scrollLeft > max - 8;
   };
+
   strip.addEventListener('scroll', sync, {passive:true});
-  if('IntersectionObserver' in window && cnt){
-    const io = new IntersectionObserver(es=>{
-      es.forEach(e=>{ if(e.intersectionRatio >= 0.55) show(figs.indexOf(e.target)); });
+  syncs.push(sync);
+
+  if(many && 'IntersectionObserver' in window){
+    const io = new IntersectionObserver(es => {
+      es.forEach(e => { if(e.intersectionRatio >= 0.55) show(figs.indexOf(e.target)); });
     }, {root:strip, threshold:[0.55]});
-    figs.forEach(f=>io.observe(f));
+    figs.forEach(f => io.observe(f));
   }
+
   if(prev && next){
     const go = dir => {
       const max = Math.max(0, strip.scrollWidth - strip.clientWidth);
-      strip.scrollLeft = Math.max(0, Math.min(max, strip.scrollLeft + dir*stepW()));
+      strip.scrollLeft = Math.max(0, Math.min(max, strip.scrollLeft + dir * stepW()));
       sync();
     };
-    prev.addEventListener('click', ()=>go(-1));
-    next.addEventListener('click', ()=>go(1));
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    // arrow keys once a strip has focus, same guard as the buttons
+    strip.tabIndex = 0;
+    strip.addEventListener('keydown', e => {
+      if(e.key === 'ArrowRight'){ e.preventDefault(); go(1);  }
+      if(e.key === 'ArrowLeft'){  e.preventDefault(); go(-1); }
+    });
   }
-  requestAnimationFrame(()=>requestAnimationFrame(sync));
-  setTimeout(sync, 300);
-  addEventListener('resize', sync, {passive:true});
-  addEventListener('load', sync);
-  sync();
 
-  strip.querySelectorAll('img').forEach(im=>im.addEventListener('click',()=>{
-    lbi.src = im.src; lb.classList.add('on');
-  }));
+  strip.querySelectorAll('img').forEach(im => im.addEventListener('click', () => openLb(im.src)));
 
-  const btn = el.querySelector('.pick');
-  btn.addEventListener('click', ()=>{
-    const on = picked.has(h.id);
-    on ? picked.delete(h.id) : picked.add(h.id);
-    btn.classList.toggle('on', !on);
-    btn.innerHTML = on ? '<span class="tick">+</span>Me quedo con esta'
-                       : '<span class="tick">&check;</span>Seleccionada';
-    el.classList.toggle('picked', !on);
-    send.disabled = picked.size === 0;
-    send.textContent = picked.size ? 'Enviar mi selección ('+picked.size+')' : 'Enviar mi selección';
-    try{ localStorage.setItem('loco-picks', JSON.stringify([...picked])); }catch(e){}
+  el.querySelector('.pick').addEventListener('click', () => {
+    setPick(el, !picked.has(h.id));
+    save();
   });
+
+  sync();
   return el;
 }
 
 function section(host, title, list, lead){
   const s = document.getElementById(host);
-  s.innerHTML = '<div class="sec-h"><h2>'+title+'</h2><span class="n">'+list.length+'</span></div>';
+  s.innerHTML = '<div class="sec-h"><h2>' + title + '</h2><span class="n">' + list.length + '</span></div>';
   const box = document.createElement('div');
-  if(host==='s-rest') box.className = 'grid';
-  list.forEach(h=>box.appendChild(card(h, lead)));
+  if(host === 's-rest') box.className = 'grid';
+  list.forEach(h => box.appendChild(card(h, lead)));
   s.appendChild(box);
 }
 
-section('s-lead','La primera opción', HOUSES.filter(h=>h.tier===1), true);
-section('s-mid','Justo detrás',       HOUSES.filter(h=>h.tier===2), true);
-section('s-cond','Con condiciones',   HOUSES.filter(h=>h.tier===3), true);
-section('s-rest','También sobre la mesa', HOUSES.filter(h=>h.tier===4), false);
+section('s-lead','La primera opción',     HOUSES.filter(h => h.tier === 1), true);
+section('s-mid', 'Justo detrás',          HOUSES.filter(h => h.tier === 2), true);
+section('s-cond','Con condiciones',       HOUSES.filter(h => h.tier === 3), true);
+section('s-rest','También sobre la mesa', HOUSES.filter(h => h.tier === 4), false);
 
-// restore
+// one listener per event for the whole page, not one per card
+const syncAll = () => syncs.forEach(f => f());
+addEventListener('resize', syncAll, {passive:true});
+addEventListener('load', syncAll);
+requestAnimationFrame(() => requestAnimationFrame(syncAll));
+setTimeout(syncAll, 300);
+
+// ---- restore a returning viewer's selection ----
 try{
-  (JSON.parse(localStorage.getItem('loco-picks')||'[]')).forEach(id=>{
-    const c = document.querySelector('.card[data-id="'+id+'"]');
-    if(c) c.querySelector('.pick').click();
+  const saved = JSON.parse(localStorage.getItem(STORE) || '[]');
+  if(Array.isArray(saved)) saved.forEach(id => {
+    const c = document.querySelector('.card[data-id="' + CSS.escape(id) + '"]');
+    if(c) setPick(c, true);
   });
 }catch(e){}
+refreshSend();
 
-// lightbox
-const lb=document.getElementById('lb'), lbi=document.getElementById('lbi');
-document.getElementById('lbx').onclick = ()=>lb.classList.remove('on');
-lb.onclick = e=>{ if(e.target!==lbi) lb.classList.remove('on'); };
-addEventListener('keydown', e=>{ if(e.key==='Escape') lb.classList.remove('on'); });
+// ---- lightbox ----
+let lastFocus = null;
+function openLb(src){
+  lastFocus = document.activeElement;
+  lbi.src = src;
+  lb.classList.add('on');
+  document.body.classList.add('lb-open');
+  lbx.focus();
+}
+function closeLb(){
+  lb.classList.remove('on');
+  document.body.classList.remove('lb-open');
+  lbi.removeAttribute('src');            // let the browser drop the full-size decode
+  if(lastFocus) lastFocus.focus();
+}
+lbx.addEventListener('click', closeLb);
+lb.addEventListener('click', e => { if(e.target !== lbi) closeLb(); });
+addEventListener('keydown', e => { if(e.key === 'Escape' && lb.classList.contains('on')) closeLb(); });
 
-// send picks
-const toast=document.getElementById('toast'), send=document.getElementById('send');
-function flash(m){ toast.textContent=m; toast.classList.add('on');
-  setTimeout(()=>toast.classList.remove('on'),2600); }
+// ---- send the selection ----
+let toastTimer = 0;
+function flash(m){
+  toast.textContent = m;
+  toast.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('on'), 2800);
+}
 
-send.addEventListener('click', async ()=>{
-  const chosen = HOUSES.filter(h=>picked.has(h.id));
-  const txt = 'LOCO - mi selección de localizaciones\n\n' +
-    chosen.map(h=>'· '+h.name+' ('+h.ref+') - '+h.area).join('\n') +
-    '\n\n' + location.href;
-  try{
-    await navigator.clipboard.writeText(txt);
-    flash('Copiado. Pégaselo a Oleg por WhatsApp.');
-  }catch(e){
-    const ta=document.createElement('textarea');
-    ta.value=txt; document.body.appendChild(ta); ta.select();
-    try{ document.execCommand('copy'); flash('Copiado. Pégaselo a Oleg por WhatsApp.'); }
-    catch(_){ prompt('Copia esto y envíaselo a Oleg:', txt); }
-    ta.remove();
+function pickText(){
+  const chosen = HOUSES.filter(h => picked.has(h.id));
+  return 'LOCO - mi selección de localizaciones (' + chosen.length + ')\n\n' +
+    chosen.map((h, i) => (i + 1) + '. ' + h.name + ' - ' + h.area + ' (' + h.ref + ')').join('\n') +
+    '\n\n' + location.origin + location.pathname;
+}
+
+async function copyText(txt){
+  if(navigator.clipboard && isSecureContext){
+    try{ await navigator.clipboard.writeText(txt); return true; }catch(e){}
   }
+  // iOS-safe fallback: a real, on-screen, selectable field
+  const ta = document.createElement('textarea');
+  ta.value = txt;
+  ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select(); ta.setSelectionRange(0, txt.length);
+  let ok = false;
+  try{ ok = document.execCommand('copy'); }catch(e){}
+  ta.remove();
+  return ok;
+}
+
+send.addEventListener('click', async () => {
+  if(picked.size === 0) return;
+  const txt = pickText();
+
+  // phones get the real share sheet, so the picks actually reach Oleg in one tap
+  if(navigator.share){
+    try{
+      await navigator.share({title:'LOCO - localizaciones', text:txt});
+      flash('Enviado. Gracias.');
+      return;
+    }catch(e){
+      if(e && e.name === 'AbortError') return;   // viewer closed the sheet, say nothing
+    }
+  }
+
+  if(await copyText(txt)) flash('Copiado. Pégaselo a Oleg por WhatsApp.');
+  else window.prompt('Copia esto y envíaselo a Oleg:', txt);
 });
 </script>
 </body>
