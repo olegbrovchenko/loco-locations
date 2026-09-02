@@ -7,7 +7,7 @@ const HOUSES = [
 {id:"h08",tier:2,name:"La Finca",ref:"Rep C11569RL",area:"San Agustín del Guadalix, Madrid",
  verdict:"Candidata seria, y una de las casas más fuertes de toda la lista. Fachada de piedra con pórtico de columnas, piscina de tamaño resort, jardines amplios y una cabaña de madera aparte, que es un segundo escenario dentro de la misma reserva. La llegada más cinematográfica de todas.",
  links:[["Ver todas las fotos en Rep Locations","https://replocations.com/localizaciones/c11569rl/"]],
- shots:3},
+ shots:9},
 {id:"h09",tier:2,name:"La Canadiense",ref:"Tao Plus VU 0200",area:"El Escorial, Madrid",
  verdict:"De lo mejor de la lista y peleando por el primer puesto. Madera por dentro y por fuera, frente a dos aguas, porches de madera con barandilla, camino empedrado bajo robles viejos y un salón a doble altura con altillo. La casa americana más completa después de la azul.",
  links:[["Ver todas las fotos en Tao Plus","https://www.taoplus.es/propiedades/vivienda-unifamiliar-0200/"]],
