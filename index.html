@@ -120,6 +120,13 @@ h3{margin:0 0 4px; font-size:clamp(21px,3.6vw,28px); letter-spacing:-.035em; fon
 .where b{color:var(--ink2); font-weight:400}
 .verdict{margin:0; color:var(--ink2); font-size:15.5px; max-width:62ch}
 .card.lead .verdict{font-size:17px; color:#3a3835}
+.blist{margin:14px 0 0; padding:0; list-style:none}
+.blist li{position:relative; padding:3px 0 3px 20px; color:var(--ink2); font-size:15px}
+.card.lead .blist li{font-size:15.5px; color:#3a3835}
+.blist li:before{content:""; position:absolute; left:4px; top:12px;
+  width:5px; height:5px; border-radius:50%; background:#bdb8b0}
+.closing{margin:14px 0 0; color:var(--ink2); font-size:15px; font-weight:500}
+
 .aside{margin:16px 0 0; padding:12px 15px; border-radius:10px; background:var(--panel2);
   font-size:14px; color:var(--ink2); border-left:2px solid #c9c4bc}
 .block{border-left-color:var(--red); background:#fdf2f2; color:#7d2a2d}
@@ -231,6 +238,8 @@ function card(h, lead){
      '<h3>'+esc(h.name)+'</h3>'+
      '<p class="where"><b>'+esc(h.area)+'</b> &nbsp;·&nbsp; '+esc(h.ref)+'</p>'+
      '<p class="verdict">'+esc(h.verdict)+'</p>'+
+     (h.bullets?'<ul class="blist">'+h.bullets.map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul>':'')+
+     (h.closing?'<p class="closing">'+esc(h.closing)+'</p>':'')+
      (h.blocker?'<div class="aside block"><b>Antes de que esto funcione</b>'+esc(h.blocker)+'</div>':'')+
      (h.note?'<div class="aside">'+esc(h.note)+'</div>':'')+
      '<div class="foot">'+links+'<div class="foot-sp"></div>'+
