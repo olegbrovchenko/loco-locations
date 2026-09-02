@@ -211,7 +211,7 @@ footer{margin:70px 0 0; padding:26px 0 60px; border-top:1px solid var(--line);
   <section class="intro">
     <h1>RVFV x YAPI - LOCO<br><em>Búsqueda de casas</em></h1>
     <p class="lede">Orden de preferencia.</p>
-    <p class="lede">Pulsa <b>Me quedo con esta</b> en las que apoyarías y luego <b>Enviar mi selección</b>.</p>
+    <p class="lede">Pulsa <b>Me gusta esta</b> en las que te gusten y luego <b>Enviar mi selección</b>.</p>
 
     <div class="warn">
       <b>Importante</b>
@@ -269,8 +269,8 @@ function setPick(el, on){
   el.classList.toggle('picked', on);
   btn.classList.toggle('on', on);
   btn.setAttribute('aria-pressed', String(on));
-  btn.innerHTML = on ? '<span class="tick">&check;</span>Seleccionada'
-                     : '<span class="tick">+</span>Me quedo con esta';
+  btn.innerHTML = on ? '<span class="tick">&check;</span>Me gusta'
+                     : '<span class="tick">+</span>Me gusta esta';
   refreshSend();
 }
 
@@ -315,7 +315,7 @@ function card(h, lead){
      (h.note    ? '<div class="aside">' + esc(h.note) + '</div>' : '') +
      '<div class="foot">' + links + '<div class="foot-sp"></div>' +
        '<button type="button" class="pick" aria-pressed="false">' +
-         '<span class="tick">+</span>Me quedo con esta</button>' +
+         '<span class="tick">+</span>Me gusta esta</button>' +
      '</div>' +
    '</div>';
 
